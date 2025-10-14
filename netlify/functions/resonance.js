@@ -17,7 +17,8 @@ export async function handler(event) {
       { from: houseA, to: houseB, type: areComplements ? "complement" : (areNeighbors ? "neighbor" : "neutral") }
     ];
     const resonance = areComplements ? "complement" : (areNeighbors ? "neighbor" : "neutral");
-    const commentary = `Run = Zyklus: ${houseA} → ${houseB}. Resonanztyp: ${resonance}. CORE hält das Feld.`;
+   const commentary = `Run = Cycle: ${houseA} → ${houseB}. Resonance: ${resonance}. CORE holds the field; no conducting, only coupling.`;
+
 
     return { statusCode:200, headers:{ "Content-Type":"application/json","Cache-Control":"no-store"},
       body: JSON.stringify({ nodes, edges, commentary }) };
