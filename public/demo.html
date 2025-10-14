@@ -1,39 +1,129 @@
 <!doctype html><html lang="de"><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Demo – Run = Zyklus</title>
 <style>
-body{font:16px/1.5 system-ui;margin:2rem;max-width:900px}
-label,select,button{font:inherit}.row{display:flex;gap:1rem;align-items:center;margin:.5rem 0}
+:root{--pad:24px}
+body{font:16px/1.5 system-ui;margin:2rem;max-width:980px}
+label,select,button{font:inherit}.row{display:flex;gap:1rem;align-items:center;margin:.5rem 0;flex-wrap:wrap}
 pre{background:#f7f7f7;padding:1rem;border-radius:8px;overflow:auto}.badge{padding:.2rem .5rem;border:1px solid #ddd;border-radius:6px}
+.card{border:1px solid #e6e6e6;border-radius:12px;padding:var(--pad);margin-top:1rem}
+.small{opacity:.8;font-size:.9rem}
+svg{width:100%;height:320px;border:1px dashed #eee;border-radius:12px;background:#fff}
+.node{cursor:default}
+.tooltip{margin-top:.25rem;padding:.4rem .6rem;border:1px solid #eee;border-radius:8px;background:#fafafa}
+.legend{display:flex;gap:.5rem;align-items:center;margin-top:.5rem}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid #aaa}
 </style>
+
 <h1>Run = Zyklus</h1>
-<div class="row">
+<p class="small">Wähle zwei Häuser – der <em>Run</em> macht Resonanz sichtbar. Kein Dirigieren, nur Kopplung zum CORE.</p>
+
+<div class="row card">
   <label for="a">Haus A:</label>
   <select id="a">
     <option>NNO</option><option>ONO</option><option>OSO</option><option>SSO</option>
     <option>SSW</option><option>WSW</option><option>WNW</option><option>NNW</option>
   </select>
+
   <label for="b">Haus B:</label>
   <select id="b">
     <option>ONO</option><option>OSO</option><option>SSO</option><option>SSW</option>
     <option>WSW</option><option>WNW</option><option>NNW</option><option>NNO</option>
   </select>
+
   <button id="run">Run starten</button>
+  <div id="status" class="badge">bereit</div>
 </div>
-<div id="status" class="badge">bereit</div>
-<h2>Ergebnis</h2>
-<pre id="out">—</pre>
+
+<div class="card">
+  <svg id="viz" viewBox="0 0 800 320" aria-label="Resonanz-Graph">
+    <!-- wird via JS gefüllt -->
+  </svg>
+  <div id="tip" class="tooltip" aria-live="polite">—</div>
+  <div class="legend">
+    <span class="dot" style="background:#999"></span><span class="small">neutral</span>
+    <span class="dot" style="background:#31a354"></span><span class="small">neighbor</span>
+    <span class="dot" style="background:#d95f0e"></span><span class="small">complement</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Ergebnis (JSON)</h2>
+  <pre id="out">—</pre>
+</div>
+
+<p class="small">Mehr zur Zielkarte: <a href="/about.html">Was ist die Target Map?</a></p>
+
 <script>
+const svg = document.getElementById('viz');
+const tip = document.getElementById('tip');
+function colorFor(type){
+  if(type==="complement") return "#d95f0e";
+  if(type==="neighbor") return "#31a354";
+  return "#999";
+}
+function renderGraph(json){
+  svg.innerHTML="";
+  const W=800,H=320, cx=W/2, cy=H/2;
+  // Positionen: A links, CORE Mitte, B rechts
+  const A={x:160,y:cy}, CORE={x:cx,y:cy}, B={x:W-160,y:cy};
+  const type = (json.edges.find(e=>e.from!== "CORE" && e.to!=="CORE")||{}).type || "neutral";
+
+  // Kanten
+  const line = (p,q,cls)=> {
+    const l=document.createElementNS("http://www.w3.org/2000/svg","line");
+    l.setAttribute("x1",p.x); l.setAttribute("y1",p.y);
+    l.setAttribute("x2",q.x); l.setAttribute("y2",q.y);
+    l.setAttribute("stroke", colorFor(cls)); l.setAttribute("stroke-width","3");
+    l.setAttribute("stroke-linecap","round");
+    svg.appendChild(l); return l;
+  };
+  // A->CORE, CORE->B
+  line(A,CORE,"neutral"); line(CORE,B,"neutral");
+  // A->B (Resonanz)
+  const pulse = line(A,B,type);
+  pulse.setAttribute("stroke-dasharray","6 6");
+  // kleiner Puls
+  let d=0; (function anim(){
+    d=(d+1)%12; pulse.setAttribute("stroke-dashoffset", d);
+    requestAnimationFrame(anim);
+  })();
+
+  // Knoten
+  function node(p,label,fill="#fff"){
+    const g=document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.setAttribute("class","node");
+    const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("cx",p.x); c.setAttribute("cy",p.y); c.setAttribute("r","26");
+    c.setAttribute("fill",fill); c.setAttribute("stroke","#111"); c.setAttribute("stroke-width","1.5");
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",p.x); t.setAttribute("y",p.y+5); t.setAttribute("text-anchor","middle");
+    t.setAttribute("font-size","14"); t.textContent=label;
+    g.appendChild(c); g.appendChild(t); svg.appendChild(g);
+  }
+  node(A, json.nodes.find(n=>n.role==="source").id);
+  node(CORE, "CORE", "#f8f8f8");
+  node(B, json.nodes.find(n=>n.role==="target").id);
+
+  tip.textContent = json.commentary;
+  document.getElementById('out').textContent = JSON.stringify(json,null,2);
+}
+
 async function run(){
-  const a=document.getElementById('a').value,b=document.getElementById('b').value;
-  const status=document.getElementById('status'),out=document.getElementById('out');
+  const a=document.getElementById('a').value, b=document.getElementById('b').value;
+  const status=document.getElementById('status');
   status.textContent="läuft…";
   try{
     const res=await fetch(`/.netlify/functions/resonance?houseA=${a}&houseB=${b}`);
     const json=await res.json();
-    out.textContent=JSON.stringify(json,null,2);
+    renderGraph(json);
     status.textContent="fertig";
-  }catch(e){out.textContent=String(e);status.textContent="Fehler";}
+  }catch(e){
+    tip.textContent="Fehler: "+e;
+    status.textContent="Fehler";
+  }
 }
 document.getElementById('run').addEventListener('click',run);
+// initialer Run
+run();
 </script>
 </html>
