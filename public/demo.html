@@ -1,17 +1,194 @@
 <!doctype html><html lang="en"><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Demo – Run = Cycle</title>
 <style>
-:root{--pad:24px}
-body{font:16px/1.5 system-ui;margin:2rem;max-width:980px;color:#111}
-label,select,button{font:inherit}.row{display:flex;gap:1rem;align-items:center;margin:.5rem 0;flex-wrap:wrap}
-pre{background:#f7f7f7;padding:1rem;border-radius:8px;overflow:auto}.badge{padding:.2rem .5rem;border:1px solid #ddd;border-radius:6px}
-.card{border:1px solid #e6e6e6;border-radius:12px;padding:var(--pad);margin-top:1rem}
-.small{opacity:.8;font-size:.9rem}
-svg{width:100%;height:320px;border:1px dashed #eee;border-radius:12px;background:#fff}
-.node{cursor:default}
-.tooltip{margin-top:.25rem;padding:.4rem .6rem;border:1px solid #eee;border-radius:8px;background:#fafafa}
-.legend{display:flex;gap:.5rem;align-items:center;margin-top:.5rem}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid #aaa}
+:root {
+  --neon-cyan: #00ffff;
+  --neon-magenta: #ff00ff;
+  --neon-green: #00ff00;
+  --neon-yellow: #ffff00;
+  --neon-purple: #8b00ff;
+  --neon-orange: #ff4500;
+  --dark-bg: #0a0a0a;
+  --darker-bg: #050505;
+  --pad: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px/1.5 system-ui;
+  margin: 2rem;
+  max-width: 980px;
+  color: #ffffff;
+  background: var(--dark-bg);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 25%, #0a1a1a 50%, #1a1a0a 75%, #0a0a0a 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-green));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 4s ease-in-out infinite;
+}
+
+@keyframes textShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+label, select, button {
+  font: inherit;
+  color: #ffffff;
+}
+
+select {
+  background: rgba(0, 255, 255, 0.1);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: var(--neon-cyan);
+}
+
+select option {
+  background: var(--dark-bg);
+  color: var(--neon-cyan);
+}
+
+button {
+  background: transparent;
+  border: 2px solid var(--neon-magenta);
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  color: var(--neon-magenta);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  background: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 20px var(--neon-magenta);
+  transform: translateY(-2px);
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: .5rem 0;
+  flex-wrap: wrap;
+}
+
+pre {
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  padding: 1rem;
+  border-radius: 12px;
+  overflow: auto;
+  color: var(--neon-cyan);
+  font-family: 'Courier New', monospace;
+}
+
+.badge {
+  padding: .4rem .8rem;
+  border: 2px solid var(--neon-green);
+  border-radius: 8px;
+  background: rgba(0, 255, 0, 0.1);
+  color: var(--neon-green);
+  font-weight: bold;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+  }
+}
+
+.card {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: var(--pad);
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.small {
+  opacity: .8;
+  font-size: .9rem;
+  color: #e0e0e0;
+}
+
+svg {
+  width: 100%;
+  height: 320px;
+  border: 2px dashed rgba(0, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.node {
+  cursor: default;
+}
+
+.tooltip {
+  margin-top: .25rem;
+  padding: .6rem .8rem;
+  border: 2px solid rgba(255, 255, 0, 0.5);
+  border-radius: 10px;
+  background: rgba(255, 255, 0, 0.05);
+  color: var(--neon-yellow);
+  font-weight: 500;
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: .5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px currentColor;
+}
+
+.legend span {
+  color: #e0e0e0;
+}
 </style>
 
 <h1>Run = Cycle</h1>
@@ -40,9 +217,9 @@ svg{width:100%;height:320px;border:1px dashed #eee;border-radius:12px;background
   </svg>
   <div id="tip" class="tooltip" aria-live="polite">—</div>
   <div class="legend">
-    <span class="dot" style="background:#999"></span><span class="small">neutral</span>
-    <span class="dot" style="background:#31a354"></span><span class="small">neighbor</span>
-    <span class="dot" style="background:#d95f0e"></span><span class="small">complement</span>
+    <span class="dot" style="background:#00ffff"></span><span class="small">neutral</span>
+    <span class="dot" style="background:#00ff00"></span><span class="small">neighbor</span>
+    <span class="dot" style="background:#ff4500"></span><span class="small">complement</span>
   </div>
 </div>
 
@@ -57,9 +234,9 @@ svg{width:100%;height:320px;border:1px dashed #eee;border-radius:12px;background
 const svg = document.getElementById('viz');
 const tip = document.getElementById('tip');
 function colorFor(type){
-  if(type==="complement") return "#d95f0e";
-  if(type==="neighbor") return "#31a354";
-  return "#999";
+  if(type==="complement") return "#ff4500"; // neon orange
+  if(type==="neighbor") return "#00ff00"; // neon green
+  return "#00ffff"; // neon cyan for neutral
 }
 function renderGraph(json){
   svg.innerHTML="";
