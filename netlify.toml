@@ -1,49 +1,7 @@
-########################################
-# Netlify Build Config – Resonance Gateway
-########################################
-
 [build]
   publish = "public"
   functions = "netlify/functions"
-  command = "echo 'Resonance Gateway build…'"
-
-########################################
-# Functions Setup
-########################################
 
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@netlify/blobs"]
-  included_files = ["netlify/functions/**"]
-  # Runtime target ensures compatibility for modern ESM
-  node_bundler_esbuild_target = "node18"
-
-########################################
-# Environment Variables (optional defaults)
-########################################
-
-[template.environment]
-  NETLIFY_AI_GATEWAY_URL = "https://example-ai-gateway.netlify.app/.netlify/functions/ai" # optional fallback
-  AI_MODEL = "gpt-5-reasoning"
-  MEMORY_NAMESPACE = "resonance-memory"
-
-########################################
-# Redirects (optional helper)
-########################################
-
-[[redirects]]
-  from = "/"
-  to = "/demo.html"
-  status = 302
-
-########################################
-# Headers (optional security + cache)
-########################################
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Cache-Control = "public, max-age=60"
