@@ -122,8 +122,8 @@ run(); // initial
 
 <!-- ===== Cycles MVP — add-on section (non-intrusive) ===== -->
 <section class="card" style="margin-top:1.5rem">
-  <h2>Cycles MVP (WSW → WNW → Core)</h2>
-  <p class="small">Kick off a cycle with soft market signals (WSW), distill them to light metrics (WNW), then synthesize in the Integration Core.</p>
+  <h2>Cycles MVP (WSW → WNW → ONO → Core)</h2>
+  <p class="small">Kick off a cycle with soft market signals (WSW), distill them to light metrics (WNW), craft product decisions (ONO), then synthesize in the Integration Core.</p>
 
   <div class="row">
     <label>Topic
@@ -141,6 +141,7 @@ run(); // initial
   <div class="row">
     <button id="cx-run-wsw">Run WSW (Market)</button>
     <button id="cx-run-wnw">Run WNW (Analytics)</button>
+    <button id="cx-run-ono">Run ONO (Product)</button>
     <button id="cx-run-core">Synthesize Core</button>
   </div>
 
@@ -189,8 +190,21 @@ run(); // initial
     }
   };
 
+  $("cx-run-ono").onclick = async () => {
+    if (!cycleId) { $("cx-out").textContent = "Run WSW/WNW first to generate backlog and metrics."; return; }
+    $("cx-status").textContent = "ONO…";
+    try {
+      const res = await post("/.netlify/functions/house-ono", { cycleId, topic: $("cx-topic").value });
+      $("cx-out").textContent = JSON.stringify(res, null, 2);
+      $("cx-status").textContent = "ONO ✓";
+    } catch (e) {
+      $("cx-status").textContent = "ONO error";
+      $("cx-out").textContent = String(e);
+    }
+  };
+
   $("cx-run-core").onclick = async () => {
-    if (!cycleId) { $("cx-out").textContent = "Run WSW (and optionally WNW) first."; return; }
+    if (!cycleId) { $("cx-out").textContent = "Run WSW (and optionally WNW/ONO) first."; return; }
     $("cx-status").textContent = "Core…";
     try {
       const res = await post("/.netlify/functions/core-gateway", { cycleId });
