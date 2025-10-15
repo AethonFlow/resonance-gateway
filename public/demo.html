@@ -119,4 +119,89 @@ async function run(){
 document.getElementById('run').addEventListener('click',run);
 run(); // initial
 </script>
+
+<!-- ===== Cycles MVP — add-on section (non-intrusive) ===== -->
+<section class="card" style="margin-top:1.5rem">
+  <h2>Cycles MVP (WSW → WNW → Core)</h2>
+  <p class="small">Kick off a cycle with soft market signals (WSW), distill them to light metrics (WNW), then synthesize in the Integration Core.</p>
+
+  <div class="row">
+    <label>Topic
+      <input id="cx-topic" value="Student Weinkontor" />
+    </label>
+    <label>Phase
+      <select id="cx-phase">
+        <option>init</option>
+        <option>cycle-1</option>
+      </select>
+    </label>
+    <span id="cx-status" class="badge">idle</span>
+  </div>
+
+  <div class="row">
+    <button id="cx-run-wsw">Run WSW (Market)</button>
+    <button id="cx-run-wnw">Run WNW (Analytics)</button>
+    <button id="cx-run-core">Synthesize Core</button>
+  </div>
+
+  <pre id="cx-out" style="margin-top:1rem;white-space:pre-wrap;background:#f7f7f7;padding:1rem;border-radius:8px;overflow:auto">—</pre>
+</section>
+
+<script>
+(() => {
+  async function post(url, data) {
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data || {})
+    });
+    return r.json();
+  }
+
+  const $ = (id) => document.getElementById(id);
+  let cycleId = null;
+
+  $("cx-run-wsw").onclick = async () => {
+    $("cx-status").textContent = "WSW…";
+    const topic = $("cx-topic").value;
+    const phase = $("cx-phase").value;
+    try {
+      const res = await post("/.netlify/functions/house-wsw", { cycleId, topic, phase });
+      cycleId = res.cycleId || cycleId;
+      $("cx-out").textContent = JSON.stringify(res, null, 2);
+      $("cx-status").textContent = "WSW ✓";
+    } catch (e) {
+      $("cx-status").textContent = "WSW error";
+      $("cx-out").textContent = String(e);
+    }
+  };
+
+  $("cx-run-wnw").onclick = async () => {
+    if (!cycleId) { $("cx-out").textContent = "Start with WSW to create a cycleId."; return; }
+    $("cx-status").textContent = "WNW…";
+    try {
+      const res = await post("/.netlify/functions/house-wnw", { cycleId });
+      $("cx-out").textContent = JSON.stringify(res, null, 2);
+      $("cx-status").textContent = "WNW ✓";
+    } catch (e) {
+      $("cx-status").textContent = "WNW error";
+      $("cx-out").textContent = String(e);
+    }
+  };
+
+  $("cx-run-core").onclick = async () => {
+    if (!cycleId) { $("cx-out").textContent = "Run WSW (and optionally WNW) first."; return; }
+    $("cx-status").textContent = "Core…";
+    try {
+      const res = await post("/.netlify/functions/core-gateway", { cycleId });
+      $("cx-out").textContent = JSON.stringify(res, null, 2);
+      $("cx-status").textContent = "Core ✓";
+    } catch (e) {
+      $("cx-status").textContent = "Core error";
+      $("cx-out").textContent = String(e);
+    }
+  };
+})();
+</script>
+<!-- ===== end Cycles MVP add-on ===== -->
 </html>
