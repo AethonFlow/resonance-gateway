@@ -1,0 +1,83 @@
+[
+  {
+    "id": "NNO",
+    "name": "Konzept",
+    "frequency_hz": 417,
+    "color": "#6A5ACD",
+    "complement": "SSW",
+    "axis": "Nord-Süd",
+    "tone": "Neugier"
+  },
+  {
+    "id": "ONO",
+    "name": "Erkenntnis",
+    "frequency_hz": 741,
+    "color": "#40E0D0",
+    "complement": "WSW",
+    "axis": "Ost-West",
+    "tone": "Klarheit"
+  },
+  {
+    "id": "OSO",
+    "name": "Kommunikation",
+    "frequency_hz": 639,
+    "color": "#FFD54F",
+    "complement": "WNW",
+    "axis": "West-Ost",
+    "tone": "Warm"
+  },
+  {
+    "id": "SSO",
+    "name": "Emotion",
+    "frequency_hz": 396,
+    "color": "#FF7043",
+    "complement": "NNW",
+    "axis": "Süd-Nord",
+    "tone": "Sanft"
+  },
+  {
+    "id": "SSW",
+    "name": "Reflexion",
+    "frequency_hz": 852,
+    "color": "#ECEFF1",
+    "complement": "NNO",
+    "axis": "Nord-Süd",
+    "tone": "Meditativ"
+  },
+  {
+    "id": "WSW",
+    "name": "Stabilität",
+    "frequency_hz": 432,
+    "color": "#2E7D32",
+    "complement": "ONO",
+    "axis": "Ost-West",
+    "tone": "Erdend"
+  },
+  {
+    "id": "WNW",
+    "name": "Analyse",
+    "frequency_hz": 528,
+    "color": "#4B0082",
+    "complement": "OSO",
+    "axis": "West-Ost",
+    "tone": "Präzise"
+  },
+  {
+    "id": "NNW",
+    "name": "Integration",
+    "frequency_hz": 999,
+    "color": "#8A2BE2",
+    "complement": "SSO",
+    "axis": "Süd-Nord",
+    "tone": "Erlösend"
+  },
+  {
+    "id": "CENTER",
+    "name": "AI-Kern",
+    "frequency_hz": 963,
+    "color": "#FFFFFF",
+    "complement": null,
+    "axis": "Nullpunkt",
+    "tone": "Still"
+  }
+]
