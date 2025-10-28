@@ -1,0 +1,104 @@
+{
+    "houses": [
+        {
+            "id": "NNO",
+            "energy": 0.3,
+            "phase": 0.0,
+            "freq": 0.7,
+            "neighbors": [
+                "ONO",
+                "NNW"
+            ],
+            "complement": "NNW"
+        },
+        {
+            "id": "ONO",
+            "energy": 0.4,
+            "phase": 0.2,
+            "freq": 0.8,
+            "neighbors": [
+                "OSO",
+                "NNO"
+            ],
+            "complement": "SSW"
+        },
+        {
+            "id": "OSO",
+            "energy": 0.5,
+            "phase": 0.4,
+            "freq": 0.9,
+            "neighbors": [
+                "SSO",
+                "ONO"
+            ],
+            "complement": "WNW"
+        },
+        {
+            "id": "SSO",
+            "energy": 0.5,
+            "phase": 0.6,
+            "freq": 1.0,
+            "neighbors": [
+                "SSW",
+                "OSO"
+            ],
+            "complement": "WSW"
+        },
+        {
+            "id": "SSW",
+            "energy": 0.4,
+            "phase": 0.8,
+            "freq": 0.9,
+            "neighbors": [
+                "WSW",
+                "SSO"
+            ],
+            "complement": "ONO"
+        },
+        {
+            "id": "WSW",
+            "energy": 0.6,
+            "phase": 1.0,
+            "freq": 0.8,
+            "neighbors": [
+                "WNW",
+                "SSW"
+            ],
+            "complement": "SSO"
+        },
+        {
+            "id": "WNW",
+            "energy": 0.5,
+            "phase": 1.2,
+            "freq": 0.7,
+            "neighbors": [
+                "NNW",
+                "WSW"
+            ],
+            "complement": "OSO"
+        },
+        {
+            "id": "NNW",
+            "energy": 0.4,
+            "phase": 1.4,
+            "freq": 0.6,
+            "neighbors": [
+                "NNO",
+                "WNW"
+            ],
+            "complement": "NNO"
+        }
+    ],
+    "core": {
+        "energy": 0.5,
+        "phase": 0.0,
+        "coupling": 0.5
+    },
+    "run": {
+        "id": "run-001",
+        "bpm": 60,
+        "tick": 0,
+        "mode": "free",
+        "lastEvents": []
+    }
+}

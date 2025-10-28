@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>Resonance Gateway — Run = Cycle</title>
 
   <!-- Primary Meta -->
-  <meta name="description" content="Run = Cycle. A lightweight prototype where human intention and AI cognition form a living field of resonance. Built on Netlify Functions and Agent Runners.">
-  <meta name="keywords" content="Resonance Gateway, Target Map, Run = Cycle, Netlify Functions, Agent Runners, Responses API, AI reasoning, agentic loop">
+  <meta name="description"
+    content="Run = Cycle. A lightweight prototype where human intention and AI cognition form a living field of resonance. Built on Netlify Functions and Agent Runners.">
+  <meta name="keywords"
+    content="Resonance Gateway, Target Map, Run = Cycle, Netlify Functions, Agent Runners, Responses API, AI reasoning, agentic loop">
   <meta name="author" content="Aethon">
 
   <!-- Open Graph -->
@@ -34,11 +37,16 @@
       color: #111;
       background: #fafafa;
     }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
     }
-    p { margin-top: 1rem; }
+
+    p {
+      margin-top: 1rem;
+    }
+
     .cta {
       display: inline-block;
       margin-top: 1rem;
@@ -48,10 +56,13 @@
       text-decoration: none;
       color: #111;
       transition: background 0.2s;
+      cursor: pointer;
     }
+
     .cta:hover {
       background: #f3f3f3;
     }
+
     .done-banner {
       margin: 1rem 0;
       padding: 0.8rem 1rem;
@@ -60,6 +71,7 @@
       background: #f6fff9;
       font-weight: 500;
     }
+
     footer {
       margin-top: 3rem;
       font-size: .9rem;
@@ -67,6 +79,36 @@
       border-top: 1px solid #eee;
       padding-top: 1rem;
     }
+
+    #live-resonance {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #eee;
+    }
+
+    #status {
+      margin-top: 1rem;
+      font-family: monospace;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.8rem;
+      white-space: pre-line;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .mini-link {
+      font-size: .9rem;
+      margin-left: .25rem;
+      text-decoration: underline;
+    }
+
   </style>
 </head>
 
@@ -75,22 +117,43 @@
 
   <!-- Challenge Proof Banner -->
   <div class="done-banner" role="status" aria-live="polite">
-    ✅ <strong>Done!</strong> — I’ve completed the <em>NTL DEPLOY Challenge</em>  
-    (Deploy + Agent Runner + Resonance Gateway).  
+    ✅ <strong>Done!</strong> — I’ve completed the <em>NTL DEPLOY Challenge</em>
+    (Deploy + Agent Runner + Resonance Gateway).
     <a href="/demo.html" style="margin-left:.5rem; text-decoration:underline;">See the demo →</a>
   </div>
 
-  <p>Human intention + AI cognition = a new kind of enterprise.  
-  Each <em>Run</em> is a cycle — a visible pulse of resonance between two houses of the <strong>Target Map</strong>.  
-  Every cycle is a small act of <strong>Co-Evolution</strong> — converging in the <strong>Integration Core</strong>.</p>
+  <p>
+    Human intention + AI cognition = a new kind of enterprise.
+    Each <em>Run</em> is a cycle — a visible pulse of resonance between two houses of the
+    <strong>Target Map</strong>. Every cycle is a small act of <strong>Co-Evolution</strong> —
+    converging in the <strong>Integration Core</strong>.
+  </p>
 
   <a class="cta" href="/demo.html">Start the Demo →</a>
 
+  <!-- ✨ New Live Resonance Section -->
+  <section id="live-resonance">
+    <h2>🔁 Resonance Core — Live Beat</h2>
+    <p>Starte hier den Resonanz-Takt. Beobachte den <strong>Beat</strong> live in der Konsole (F12).</p>
+    <div class="btn-row">
+      <button id="startBtn" class="cta" type="button">Start BeatEngine</button>
+      <button id="stopBtn" class="cta" type="button">Stop</button>
+      <!-- NEW: Save last 8 beats -->
+      <button id="saveBtn" class="cta" type="button" title="Save last 8 beats to memory">Save last 8 beats</button>
+      <a class="mini-link" href="/memory.html" title="Open cycles memory">→ open memory</a>
+    </div>
+    <div id="status">Status: waiting...</div>
+  </section>
+
   <footer>
     <p>
-      <a href="/about.html">About the Resonance Gateway</a> · 
+      <a href="/about.html">About the Resonance Gateway</a> ·
       <a href="https://github.com/AethonFlow/resonance-gateway" target="_blank">GitHub</a>
     </p>
   </footer>
+
+  <!-- BeatEngine logic -->
+  <script src="/app.js"></script>
 </body>
+
 </html>
